@@ -39,3 +39,5 @@ function makePageForEpisodes(episodeList) {
 }
 
 window.onload = setup;
+
+// yay
