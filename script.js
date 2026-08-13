@@ -9,7 +9,14 @@ const state = {
 function createTvShowCard(tvShow) {
   const tvShowCard = document
     .getElementById("tv-show-card")
-    .content.cloneNode(true);
+    .content
+    .cloneNode(true);
+
+  const title = tvShowCard.querySelector("h3");
+  title.textContent = `${tvShow.name} - S${String(tvShow.season).padStart(
+    2,
+    "0",
+  )}E${String(tvShow.number).padStart(2, "0")}`;
 
   const title = tvShowCard.querySelector("h3");
   title.textContent = `${tvShow.name} - S${String(tvShow.season).padStart(
