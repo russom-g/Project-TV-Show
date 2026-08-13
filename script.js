@@ -1,18 +1,22 @@
-//You can edit ALL of the code here
-
-function setup() {
-  const tvShows = getAllEpisodes();
-
-  const tvShowCards = tvShows.map(createTvShowCard);
-
-  root.append(...tvShowCards);
-}
+const root = document.getElementById("root");
+const searchInput = document.getElementById("q");
+const episodeArr = getAllEpisodes();
+const state = {
+  episodes: episodeArr,
+  searchTerm: "",
+};
 
 function createTvShowCard(tvShow) {
   const tvShowCard = document
     .getElementById("tv-show-card")
     .content
     .cloneNode(true);
+
+  const title = tvShowCard.querySelector("h3");
+  title.textContent = `${tvShow.name} - S${String(tvShow.season).padStart(
+    2,
+    "0",
+  )}E${String(tvShow.number).padStart(2, "0")}`;
 
   const title = tvShowCard.querySelector("h3");
   title.textContent = `${tvShow.name} - S${String(tvShow.season).padStart(
@@ -35,11 +39,51 @@ function createTvShowCard(tvShow) {
   return tvShowCard;
 }
 
-window.onload = setup;
+function updateCount(list) {
+  const countElement = document.getElementById("search-count");
 
-/*
-function makePageForEpisodes(episodeList) {
-  const rootElem = document.getElementById("root");
-  rootElem.textContent = `Got ${episodeList.length} episode(s)`;
+  // If search box is empty → show total episodes
+  if (state.searchTerm.trim() === "") {
+    countElement.textContent = `Total episodes: ${state.episodes.length}`;
+    return;
+  }
+
+  // If typing → show matching episodes
+  countElement.textContent = `Matching episodes: ${list.length}`;
 }
-*/
+
+function renderEpisodes(list) {
+  root.innerHTML = "";
+  const tvShowCards = list.map(createTvShowCard);
+  root.append(...tvShowCards);
+  updateCount(list);
+}
+
+function handleSearch() {
+  const term = searchInput.value.toLowerCase();
+  state.searchTerm = term;
+
+  if (term === "") {
+    renderEpisodes(state.episodes);
+    return;
+  }
+
+  const filteredEpisodes = state.episodes.filter(function (tvshow) {
+    const name = tvshow.name.toLowerCase();
+
+    let summary = "";
+    if (tvshow.summary) {
+      summary = tvshow.summary.toLowerCase();
+    }
+
+    return name.indexOf(state.searchTerm.toLowerCase()) !== -1;
+  });
+
+  renderEpisodes(filteredEpisodes);
+}
+
+renderEpisodes(state.episodes);
+
+searchInput.addEventListener("keyup", function () {
+  handleSearch();
+});
