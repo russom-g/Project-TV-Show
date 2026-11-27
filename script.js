@@ -2,7 +2,7 @@
 function setup() {
   const state = {
     allEpisodes: getAllEpisodes(),
-    searchTerm: "winter",
+    searchTerm: "",
   }
   makePageForEpisodes(state);
   eventListening(state);
@@ -33,7 +33,8 @@ function makePageForEpisodes(state) {
   rootElem.innerHTML = "";
 
   const filteredEpisodes = state.allEpisodes.filter((episode) =>
-    episode.name.toLowerCase().includes(state.searchTerm.toLowerCase()),
+    (episode.name.toLowerCase().includes(state.searchTerm.toLowerCase())) ||
+    (episode.summary.toLowerCase().includes(state.searchTerm.toLowerCase())),
   );
 
   filteredEpisodes.forEach((episode) => {
