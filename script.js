@@ -3,7 +3,10 @@ function setup() {
   const state = {
     allEpisodes: getAllEpisodes(),
     searchTerm: "",
-  }
+  };
+
+  document.getElementById("eps-num").innerText = `${getAllEpisodes().length}`;
+
   makePageForEpisodes(state);
   eventListening(state);
 }
@@ -36,6 +39,8 @@ function makePageForEpisodes(state) {
     (episode.name.toLowerCase().includes(state.searchTerm.toLowerCase())) ||
     (episode.summary.toLowerCase().includes(state.searchTerm.toLowerCase())),
   );
+
+  document.getElementById("displayed-eps-num").innerText = filteredEpisodes.length;
 
   filteredEpisodes.forEach((episode) => {
     rootElem.appendChild(createTvCard(episode));
