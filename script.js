@@ -1,7 +1,14 @@
 //You can edit ALL of the code here
 function setup() {
-  const allEpisodes = getAllEpisodes();
-  makePageForEpisodes(allEpisodes);
+  const state = {
+    allEpisodes: getAllEpisodes(),
+    searchTerm: "",
+  };
+
+  document.getElementById("eps-num").innerText = `${getAllEpisodes().length}`;
+
+  makePageForEpisodes(state);
+  eventListening(state);
 }
 
 function createTvCard(episode) {
@@ -24,13 +31,32 @@ function createTvCard(episode) {
   return card;
 }
 
-function makePageForEpisodes(episodeList) {
+function makePageForEpisodes(state) {
   const rootElem = document.getElementById("root");
   rootElem.innerHTML = "";
 
-  episodeList.forEach((episode) => {
+  const filteredEpisodes = state.allEpisodes.filter((episode) =>
+    (episode.name.toLowerCase().includes(state.searchTerm.toLowerCase())) ||
+    (episode.summary.toLowerCase().includes(state.searchTerm.toLowerCase())),
+  );
+
+  document.getElementById("displayed-eps-num").innerText = filteredEpisodes.length;
+
+  filteredEpisodes.forEach((episode) => {
     rootElem.appendChild(createTvCard(episode));
   });
 }
 
+function eventListening(state) {
+  const searchBox = document.getElementById("search");
+
+  searchBox.addEventListener("input", handleSearchInput);
+
+  function handleSearchInput(event) {
+    state.searchTerm = event.target.value;
+    makePageForEpisodes(state);
+  }
+}
+
 window.onload = setup;
+
