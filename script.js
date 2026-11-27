@@ -2,7 +2,7 @@
 function setup() {
   const state = {
     allEpisodes: getAllEpisodes(),
-    searchTerm: "",
+    searchTerm: "winter",
   }
   makePageForEpisodes(state);
 }
@@ -31,7 +31,12 @@ function makePageForEpisodes(state) {
   const rootElem = document.getElementById("root");
   rootElem.innerHTML = "";
 
-  state.allEpisodes.forEach((episode) => {
+  const filteredEpisodes = state.allEpisodes.filter((episode) =>
+    episode.name.toLowerCase().includes(state.searchTerm.toLowerCase()),
+  );
+
+
+  filteredEpisodes.forEach((episode) => {
     rootElem.appendChild(createTvCard(episode));
   });
 }
