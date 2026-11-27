@@ -1,7 +1,10 @@
 //You can edit ALL of the code here
 function setup() {
-  const allEpisodes = getAllEpisodes();
-  makePageForEpisodes(allEpisodes);
+  const state = {
+    allEpisodes: getAllEpisodes(),
+    searchTerm: "",
+  }
+  makePageForEpisodes(state);
 }
 
 function createTvCard(episode) {
@@ -24,11 +27,11 @@ function createTvCard(episode) {
   return card;
 }
 
-function makePageForEpisodes(episodeList) {
+function makePageForEpisodes(state) {
   const rootElem = document.getElementById("root");
   rootElem.innerHTML = "";
 
-  episodeList.forEach((episode) => {
+  state.allEpisodes.forEach((episode) => {
     rootElem.appendChild(createTvCard(episode));
   });
 }
