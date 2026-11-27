@@ -5,6 +5,7 @@ function setup() {
     searchTerm: "winter",
   }
   makePageForEpisodes(state);
+  eventListening(state);
 }
 
 function createTvCard(episode) {
@@ -35,10 +36,21 @@ function makePageForEpisodes(state) {
     episode.name.toLowerCase().includes(state.searchTerm.toLowerCase()),
   );
 
-
   filteredEpisodes.forEach((episode) => {
     rootElem.appendChild(createTvCard(episode));
   });
 }
 
+function eventListening(state) {
+  const searchBox = document.getElementById("search");
+
+  searchBox.addEventListener("input", handleSearchInput);
+
+  function handleSearchInput(event) {
+    state.searchTerm = event.target.value;
+    makePageForEpisodes(state);
+  }
+}
+
 window.onload = setup;
+
